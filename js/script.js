@@ -9,15 +9,32 @@
 
 
 // creo funzione che  mi genera numero random da 1 a 100
-function random() {
-  return Math.floor(Math.random() * 100) + 1;
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+//Bonus : seleziono il livello di difficoltà
+//chiedo all'utente di scegliere il livello di difficoltà tra 0 1 e 2
+var difficolta = parseInt(prompt("Inserisci il livello di difficoltà con 0, 1 o 2"));
+var range;
+
+while(difficolta < 0 || difficolta > 2 || isNaN(difficolta)){
+  difficolta = parseInt(prompt("Hai sbagliato l'inserimento del livello di difficoltà: scegli solo tra 0, 1 oppure 2 !!"));
+}
+
+if(difficolta == 0){
+  range = 100;
+} else if(difficolta == 1){
+  range = 80;
+} else if (difficolta == 2){
+  range = 50;
 }
 
 var arrayCasuali = [];
 // ciclo la funzione fino a creare 16 numeri casuali
 var contatore = 1;
 while(contatore <= 16){
-  var numeriCasuali = random();
+  var numeriCasuali = random(1, range);
   // console.log(numeriCasuali);
   //controllo sui duplicati
   if(!arrayCasuali.includes(numeriCasuali)){
@@ -27,18 +44,20 @@ while(contatore <= 16){
 }
 console.log(arrayCasuali);
 
-var tentativi = 100;
+var tentativi = range;
 var bombe = 16;
-
 var arrayUtente = [];
-
+var bombaEsplosa = false;
 var contatore1 = 0;
-while(contatore1 < (tentativi - bombe)){
-  var numeroUtente = parseInt(prompt("Inserisci un numero compreso tra 1 e 100, tentativo n: " + (contatore1 + 1)));
 
-  if(arrayCasuali.includes(numeroUtente)){
+while(contatore1 < (range - bombe) && bombaEsplosa == false){
+  var numeroUtente = parseInt(prompt("Inserisci un numero compreso tra 1 e " + range + " tentativo n: " + (contatore1 + 1)));
+
+  if(numeroUtente > range || numeroUtente < 1){
+    alert("Hai inserito un numero fuori range!!!");
+  } else if(arrayCasuali.includes(numeroUtente)){
+    bombaEsplosa = true;
     alert("Game Over");
-    break;
   } else if(!arrayUtente.includes(numeroUtente)){
     arrayUtente.push(numeroUtente);
     contatore1++;
@@ -46,8 +65,10 @@ while(contatore1 < (tentativi - bombe)){
     alert("Occhio, hai già inserito questo numero");
   }
 }
+
 console.log(arrayUtente);
-if(contatore1 == tentativi){
+
+if(contatore1 == (range - bombe)){
   alert("Hai vinto!!");
 }
-alert("Il tuo risultato è: " + contatore1);
+alert("Il tuo punteggio è: " + contatore1);
